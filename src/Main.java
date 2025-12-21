@@ -1,3 +1,4 @@
+import java.math.BigDecimal;
 import java.util.Scanner;
 
 public class Main {
@@ -13,7 +14,7 @@ public class Main {
     System.out.print("Year of Manufacture: ");
     int year = sc.nextInt();
     System.out.print("Base Price: ");
-    double basePrice = sc.nextDouble();
+    BigDecimal basePrice = sc.nextBigDecimal();
     sc.nextLine();
     System.out.print("Origin: ");
     String origin = sc.nextLine();

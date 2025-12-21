@@ -1,12 +1,15 @@
+import java.math.BigDecimal;
+
 abstract class Vehicle {
 
-  String model;
-  String manufacturer;
-  int year;
-  double basePrice;
-  String origin;
+  protected String model;
+  protected String manufacturer;
+  protected int year;
+  protected BigDecimal basePrice;
+  protected String origin;
+  protected static final BigDecimal vatRate=BigDecimal.valueOf(0.1);
 
-  public Vehicle(String model, String manufacturer, int year, double basePrice, String origin) {
+  public Vehicle(String model, String manufacturer, int year, BigDecimal basePrice, String origin) {
     this.model = model;
     this.manufacturer = manufacturer;
     this.year = year;
@@ -15,16 +18,19 @@ abstract class Vehicle {
 
   }
 
-  abstract double importTax();
+  abstract BigDecimal importTax();
 
-  abstract double exciseTax();
+  abstract BigDecimal exciseTax();
 
-  double vat() {
-    return 0.1 * (basePrice + importTax() + exciseTax());
+  BigDecimal vat() {
+    BigDecimal taxSum = basePrice.add(importTax()).add(exciseTax());
+
+    return taxSum.multiply(vatRate);
   }
 
-  double finalPrice() {
-    return basePrice + importTax() + exciseTax() + vat();
+
+  BigDecimal finalPrice() {
+    return basePrice.add(importTax()).add(exciseTax()).add(vat());
   }
   void printInformation() {
     System.out.println("Model: " + model);

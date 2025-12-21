@@ -1,9 +1,12 @@
+import java.math.BigDecimal;
 class Bicycle extends Vehicle {
 
-  String typeBicycle;
-  String frameMaterial;
+  private String typeBicycle;
+  private String frameMaterial;
+  private static final BigDecimal IMPORT_TAX_RATE = BigDecimal.ZERO;
+  private static final BigDecimal EXCISE_TAX_RATE = BigDecimal.ZERO;
 
-  public Bicycle(String model, String manufacturer, int year, double basePrice, String origin,
+  public Bicycle(String model, String manufacturer, int year, BigDecimal basePrice, String origin,
       String typeBicycle, String frameMaterial) {
     super(model, manufacturer, year, basePrice, origin);
     this.typeBicycle = typeBicycle;
@@ -11,16 +14,12 @@ class Bicycle extends Vehicle {
   }
 
   @Override
-  double importTax() {
-    if (typeBicycle.equals("domestic")) {
-      return 0;
-    } else {
-      return basePrice * 0.1;
-    }
+  BigDecimal importTax() {
+    return basePrice.multiply(IMPORT_TAX_RATE);
   }
 
   @Override
-  double exciseTax() {
-    return 0;
+  BigDecimal exciseTax() {
+    return basePrice.multiply(EXCISE_TAX_RATE);
   }
 }

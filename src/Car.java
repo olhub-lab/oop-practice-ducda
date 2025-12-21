@@ -1,11 +1,17 @@
+import java.math.BigDecimal;
 class Car extends Vehicle {
 
-  int seat;
-  String fuel;
-  int engineCapacity;
-  String bodyType;
+  private int seat;
+  private String fuel;
+  private int engineCapacity;
+  private String bodyType;
+  private static final String ORIGIN_DOMESTIC = "domestic";
+  private static final BigDecimal IMPORT_TAX_RATE = BigDecimal.valueOf(0.5);
+  private static final BigDecimal EXCISE_TAX_RATE_LOW = BigDecimal.valueOf(0.5);
+  private static final BigDecimal EXCISE_TAX_RATE_HIGH = BigDecimal.ONE;
+  private static final int ENGINE_CAPACITY_LIMIT = 3000;
 
-  public Car(String model, String manufacturer, int year, double basePrice, String origin, int seat,
+  public Car(String model, String manufacturer, int year, BigDecimal basePrice, String origin, int seat,
       String fuel, int engineCapacity) {
     super(model, manufacturer, year, basePrice, origin);
     this.seat = seat;
@@ -15,21 +21,22 @@ class Car extends Vehicle {
   }
 
   @Override
-  double importTax() {
-    if (origin.equals("domestic")) {
-      return 0;
+  BigDecimal importTax() {
+    if (origin.equalsIgnoreCase(ORIGIN_DOMESTIC)) {
+      return BigDecimal.ZERO;
     } else {
-      return basePrice * 0.5;
+      return basePrice.multiply(IMPORT_TAX_RATE);
     }
-
   }
 
   @Override
-  double exciseTax() {
-    if (engineCapacity < 3000) {
-      return (basePrice + importTax()) * 0.5;
+  BigDecimal exciseTax() {
+    BigDecimal taxBase = basePrice.add(importTax());
+
+    if (engineCapacity < ENGINE_CAPACITY_LIMIT) {
+      return taxBase.multiply(EXCISE_TAX_RATE_LOW);
     } else {
-      return (basePrice + importTax());
+      return taxBase.multiply(EXCISE_TAX_RATE_HIGH);
     }
   }
 }
