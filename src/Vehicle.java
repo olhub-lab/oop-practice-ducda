@@ -7,7 +7,7 @@ abstract class Vehicle {
   protected int year;
   protected BigDecimal basePrice;
   protected String origin;
-  protected static final BigDecimal vatRate=BigDecimal.valueOf(0.1);
+  protected static final BigDecimal vatRate = BigDecimal.valueOf(0.1);
 
   public Vehicle(String model, String manufacturer, int year, BigDecimal basePrice, String origin) {
     this.model = model;
@@ -32,6 +32,7 @@ abstract class Vehicle {
   BigDecimal finalPrice() {
     return basePrice.add(importTax()).add(exciseTax()).add(vat());
   }
+
   void printInformation() {
     System.out.println("Model: " + model);
     System.out.println("Manufacturer: " + manufacturer);
