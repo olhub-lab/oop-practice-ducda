@@ -30,7 +30,7 @@ public class Main {
       System.out.print("Body Type: ");
       String bodyType = sc.nextLine();
       sc.nextLine();
-      vehicle = new Car(model,manufacturer,year,basePrice,origin,seat,fuel,engineCapacity);
+      vehicle = new Car(model, manufacturer, year, basePrice, origin, seat, fuel, engineCapacity);
     } else if (choice.equalsIgnoreCase("Motorbike")) {
       System.out.print("Engine Capacity: ");
       int engineCapacity = sc.nextInt();
@@ -39,13 +39,15 @@ public class Main {
       sc.nextLine();
       System.out.print("Power: ");
       String power = sc.nextLine();
-      vehicle = new Motobike(model,manufacturer,year,basePrice,origin,engineCapacity,typeMotorbike,power);
+      vehicle = new Motobike(model, manufacturer, year, basePrice, origin, engineCapacity,
+          typeMotorbike, power);
     } else if (choice.equalsIgnoreCase("Bike")) {
       System.out.print("Type Bicycle: ");
       String typeBicycle = sc.nextLine();
       System.out.print("Frame Material: ");
       String frameMaterial = sc.nextLine();
-      vehicle = new Bicycle(model,manufacturer,year,basePrice,origin,frameMaterial,typeBicycle);
+      vehicle = new Bicycle(model, manufacturer, year, basePrice, origin, frameMaterial,
+          typeBicycle);
     }
     vehicle.printInformation();
 

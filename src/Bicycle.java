@@ -1,4 +1,5 @@
 import java.math.BigDecimal;
+
 class Bicycle extends Vehicle {
 
   private String typeBicycle;
