@@ -43,4 +43,8 @@ abstract class Vehicle {
     System.out.println("Excise Tax: " + exciseTax());
     System.out.println("Final Price: " + finalPrice());
   }
+
+  public String getModel() {
+    return model;
+  }
 }
