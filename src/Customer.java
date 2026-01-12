@@ -9,7 +9,6 @@ public class Customer {
   private String phoneNumber;
   private BigDecimal balance;
   private List<Vehicle> purchaseHistory;
-  private int ownedVehicles;
   private static final int LEVEL_SILVER = 2;
   private static final int LEVEL_GOLD = 4;
   private static final int LEVEL_PLATINUM = 6;
@@ -20,25 +19,24 @@ public class Customer {
     this.phoneNumber = phoneNumber;
     this.balance = balance;
     this.purchaseHistory = new ArrayList<Vehicle>();
-    this.ownedVehicles = 0;
   }
 
-  public boolean buyVehicle(Vehicle vehicle) {
-    if (vehicle == null) {
-      return false;
-    }
-
-    BigDecimal totalPrice = vehicle.finalPrice();
-    if (balance.compareTo(totalPrice) >= 0) {
-      balance = balance.subtract(totalPrice);
-      purchaseHistory.add(vehicle);
-      getOwnedVehiclesCount();
-      return true;
-    } else {
-      System.out.println("The balance is insufficient to buy.");
-      return false;
-    }
-  }
+//  public boolean buyVehicle(Vehicle vehicle) {
+//    if (vehicle == null) {
+//      return false;
+//    }
+//
+//    BigDecimal totalPrice = vehicle.finalPrice();
+//    if (balance.compareTo(totalPrice) >= 0) {
+//      balance = balance.subtract(totalPrice);
+//      purchaseHistory.add(vehicle);
+//      getOwnedVehiclesCount();
+//      return true;
+//    } else {
+//      System.out.println("The balance is insufficient to buy.");
+//      return false;
+//    }
+//  }
 
   public void depositMonney(BigDecimal amount) {
     if (amount.compareTo(BigDecimal.ZERO) <= 0) {
@@ -64,6 +62,22 @@ public class Customer {
     } else {
       return "Regular";
     }
+  }
+
+
+  public boolean enoughMoney(BigDecimal amount) {
+    if (amount == null) {
+      return false;
+    }
+    return balance.compareTo(amount) >= 0;
+  }
+
+  public void addPurchaseHistory(Vehicle vehicle) {
+    purchaseHistory.add(vehicle);
+  }
+
+  public void minusBalance(BigDecimal amount) {
+    balance = balance.subtract(amount);
   }
 
   public int getOwnedVehiclesCount() {

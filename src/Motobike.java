@@ -11,8 +11,9 @@ class Motobike extends Vehicle {
   private static final int ENGINE_CAPACITY_LIMIT = 150;
 
   public Motobike(String model, String manufacturer, int year, BigDecimal basePrice, String origin,
+      int quantity, String type,
       int engineCapacity, String typeMotobike, String power) {
-    super(model, manufacturer, year, basePrice, origin);
+    super(model, manufacturer, year, basePrice, origin, quantity, type);
     this.engineCapacity = engineCapacity;
     this.typeMotobike = typeMotobike;
     this.power = power;

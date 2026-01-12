@@ -8,8 +8,9 @@ class Bicycle extends Vehicle {
   private static final BigDecimal EXCISE_TAX_RATE = BigDecimal.ZERO;
 
   public Bicycle(String model, String manufacturer, int year, BigDecimal basePrice, String origin,
+      int quantity, String type,
       String typeBicycle, String frameMaterial) {
-    super(model, manufacturer, year, basePrice, origin);
+    super(model, manufacturer, year, basePrice, origin, quantity, type);
     this.typeBicycle = typeBicycle;
     this.frameMaterial = frameMaterial;
   }

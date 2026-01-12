@@ -13,9 +13,10 @@ class Car extends Vehicle {
   private static final int ENGINE_CAPACITY_LIMIT = 3000;
 
   public Car(String model, String manufacturer, int year, BigDecimal basePrice, String origin,
+      int quantity, String type,
       int seat,
       String fuel, int engineCapacity) {
-    super(model, manufacturer, year, basePrice, origin);
+    super(model, manufacturer, year, basePrice, origin, quantity, type);
     this.seat = seat;
     this.fuel = fuel;
     this.engineCapacity = engineCapacity;
