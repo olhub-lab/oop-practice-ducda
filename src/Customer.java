@@ -9,9 +9,11 @@ public class Customer {
   private String phoneNumber;
   private BigDecimal balance;
   private List<Vehicle> purchaseHistory;
-  private static final int LEVEL_SILVER = 2;
-  private static final int LEVEL_GOLD = 4;
-  private static final int LEVEL_PLATINUM = 6;
+  private static final int MIN_LEVEL_SILVER = 2;
+  private static final int MAX_LEVEL_SILVER = 4;
+  private static final int MIN_LEVEL_GOLD = 5;
+  private static final int MAX_LEVEL_GOLD = 7;
+  private static final int MIN_LEVEL_PLATINUM = 8;
 
   public Customer(String name, String address, String phoneNumber, BigDecimal balance) {
     this.name = name;
@@ -21,22 +23,6 @@ public class Customer {
     this.purchaseHistory = new ArrayList<Vehicle>();
   }
 
-//  public boolean buyVehicle(Vehicle vehicle) {
-//    if (vehicle == null) {
-//      return false;
-//    }
-//
-//    BigDecimal totalPrice = vehicle.finalPrice();
-//    if (balance.compareTo(totalPrice) >= 0) {
-//      balance = balance.subtract(totalPrice);
-//      purchaseHistory.add(vehicle);
-//      getOwnedVehiclesCount();
-//      return true;
-//    } else {
-//      System.out.println("The balance is insufficient to buy.");
-//      return false;
-//    }
-//  }
 
   public void depositMonney(BigDecimal amount) {
     if (amount.compareTo(BigDecimal.ZERO) <= 0) {
@@ -47,21 +33,17 @@ public class Customer {
     System.out.println("Deposit successful. Current balance:" + balance + " VND");
   }
 
-//  public void addVehicle(Vehicle vehicle){
-//    purchaseHistory.add(vehicle);
-//  }
 
 
-  public String loyaltyLevel() {
-    if (purchaseHistory.size() >= LEVEL_PLATINUM) {
-      return "Platinum";
-    } else if (purchaseHistory.size() >= LEVEL_GOLD) {
-      return "Gold";
-    } else if (purchaseHistory.size() >= LEVEL_SILVER) {
-      return "Silver";
-    } else {
-      return "Regular";
+  LoyaltyLevel loyaltyLevel() {
+    if (getOwnedVehiclesCount() >= MIN_LEVEL_SILVER && getOwnedVehiclesCount() <= MAX_LEVEL_SILVER) {
+      return LoyaltyLevel.SILVER;
+    }else if (getOwnedVehiclesCount()>=MIN_LEVEL_GOLD && getOwnedVehiclesCount() <= MAX_LEVEL_GOLD) {
+      return LoyaltyLevel.GOLD;
+    } else if (getOwnedVehiclesCount() >= MIN_LEVEL_PLATINUM)  {
+      return LoyaltyLevel.PLATINUM;
     }
+    return LoyaltyLevel.REGULAR;
   }
 
 

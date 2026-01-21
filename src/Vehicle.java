@@ -78,15 +78,5 @@ abstract class Vehicle {
     return type;
   }
 
-  void printInformation() {
-    System.out.println("Model: " + model);
-    System.out.println("Manufacturer: " + manufacturer);
-    System.out.println("Year: " + year);
-    System.out.println("Base Price: " + basePrice);
-    System.out.println("Origin: " + origin);
-    System.out.println("Import Tax: " + importTax());
-    System.out.println("Excise Tax: " + exciseTax());
-    System.out.println("Final Price: " + finalPrice());
-  }
 
 }
