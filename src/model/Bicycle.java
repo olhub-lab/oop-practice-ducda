@@ -1,6 +1,8 @@
+package model;
+
 import java.math.BigDecimal;
 
-class Bicycle extends Vehicle {
+public class Bicycle extends Vehicle {
 
   private String typeBicycle;
   private String frameMaterial;

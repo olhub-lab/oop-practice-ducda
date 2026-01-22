@@ -1,6 +1,8 @@
+package model;
+
 import java.math.BigDecimal;
 
-class Car extends Vehicle {
+public class Car extends Vehicle {
 
   private int seat;
   private String fuel;
@@ -15,7 +17,7 @@ class Car extends Vehicle {
   public Car(String model, String manufacturer, int year, BigDecimal basePrice, String origin,
       int quantity, String type,
       int seat,
-      String fuel, int engineCapacity) {
+      String fuel, int engineCapacity, String bodyType) {
     super(model, manufacturer, year, basePrice, origin, quantity, type);
     this.seat = seat;
     this.fuel = fuel;

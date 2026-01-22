@@ -1,6 +1,8 @@
+package model;
+
 import java.math.BigDecimal;
 
-abstract class Vehicle {
+public abstract class Vehicle {
 
   protected String model;
   protected String manufacturer;
@@ -38,7 +40,7 @@ abstract class Vehicle {
   }
 
 
-  BigDecimal finalPrice() {
+  public BigDecimal finalPrice() {
     return basePrice.add(importTax()).add(exciseTax()).add(vat());
   }
 

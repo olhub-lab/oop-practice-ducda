@@ -1,3 +1,5 @@
+package model;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +26,7 @@ public class Customer {
   }
 
 
-  public void depositMonney(BigDecimal amount) {
+  public void depositMoney(BigDecimal amount) {
     if (amount.compareTo(BigDecimal.ZERO) <= 0) {
       System.out.println("The deposit amount must be greater than 0.");
       return;

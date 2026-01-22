@@ -1,5 +1,14 @@
+package controller;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import model.Bicycle;
+import model.Car;
+import model.Customer;
+import model.Dealership;
+import model.Motorbike;
+import model.Vehicle;
+import view.View;
 
 public class Controller {
 
@@ -144,8 +153,11 @@ public class Controller {
       int engine = view.inputInt();
       view.inputString();
 
+      view.show("Body type: ");
+      String bodyType = view.inputString();
+
       return new Car(model, manufacturer, year, price, origin,
-          quantity, type, seat, fuel, engine);
+          quantity, type, seat, fuel, engine,bodyType);
     }
 
     if (choice.equalsIgnoreCase("Motorbike")) {
@@ -159,7 +171,7 @@ public class Controller {
       view.show("Power: ");
       String power = view.inputString();
 
-      return new Motobike(model, manufacturer, year, price, origin,
+      return new Motorbike(model, manufacturer, year, price, origin,
           quantity, type, engine, typeMotorbike, power);
     }
 

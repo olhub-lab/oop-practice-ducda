@@ -1,9 +1,12 @@
+package model;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class Dealership {
   private String name;
-  private ArrayList<Vehicle> inventory = new ArrayList<>();
-  private ArrayList<Customer> customers = new ArrayList<>();
+  private List<Vehicle> inventory = new ArrayList<>();
+  private List<Customer> customers = new ArrayList<>();
 
   public Dealership(String name) {
     this.name = name;
@@ -32,11 +35,11 @@ public class Dealership {
     return name;
   }
 
-  public ArrayList<Customer> getCustomers() {
+  public List<Customer> getCustomers() {
     return customers;
   }
 
-  public ArrayList<Vehicle> getInventory() {
+  public List<Vehicle> getInventory() {
     return inventory;
   }
 
