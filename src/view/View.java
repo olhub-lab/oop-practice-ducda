@@ -11,11 +11,24 @@ public class View {
   }
 
   public int inputInt() {
-    return sc.nextInt();
+    while (true) {
+      try {
+        return Integer.parseInt(sc.nextLine());
+      } catch (NumberFormatException e) {
+        System.out.println("Invalid number. Please enter again: ");
+      }
+    }
   }
 
+
   public BigDecimal inputBigDecimal() {
-    return sc.nextBigDecimal();
+    while (true) {
+      try {
+        return new BigDecimal(sc.nextLine());
+      } catch (NumberFormatException e) {
+        System.out.println("Invalid amount. Please enter again: ");
+      }
+    }
   }
 
   public void show(String message) {

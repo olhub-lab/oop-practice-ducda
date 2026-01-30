@@ -28,11 +28,9 @@ public class Customer {
 
   public void depositMoney(BigDecimal amount) {
     if (amount.compareTo(BigDecimal.ZERO) <= 0) {
-      System.out.println("The deposit amount must be greater than 0.");
-      return;
+      throw new IllegalArgumentException("Amount must be greater than zero");
     }
     balance = balance.add(amount);
-    System.out.println("Deposit successful. Current balance:" + balance + " VND");
   }
 
 

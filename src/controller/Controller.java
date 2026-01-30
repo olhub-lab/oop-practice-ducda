@@ -1,21 +1,21 @@
 package controller;
 
+import exceptions.BaseException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import model.Bicycle;
-import model.Car;
+import java.util.List;
 import model.Customer;
-import model.Dealership;
-import model.Motorbike;
 import model.Vehicle;
+import service.DealershipService;
+import service.VehicleFactory;
 import view.View;
 
 public class Controller {
 
-  private Dealership dealership;
+  private DealershipService dealership;
   private View view;
 
-  public Controller(Dealership dealership, View view) {
+  public Controller(DealershipService dealership, View view) {
     this.dealership = dealership;
     this.view = view;
   }
@@ -32,7 +32,7 @@ public class Controller {
       view.show("Choose: ");
 
       int choice = view.inputInt();
-      view.inputString();
+
 
       switch (choice) {
         case 1:
@@ -60,41 +60,44 @@ public class Controller {
   }
 
   private void showCustomers() {
-    if (dealership.getCustomers().isEmpty()) {
+    List<Customer> customers = dealership.getCustomers();
+
+    if (customers.isEmpty()) {
       view.show("No customers available");
       return;
     }
 
     view.show("\n--- Customer List ---");
-    for (int i = 0; i < dealership.getCustomers().size(); i++) {
-      Customer c = dealership.getCustomers().get(i);
-      view.show((i + 1) + ". " + c.getName()
-          + " | Address: " + c.getAddress()
-          + " | Phone: " + c.getPhoneNumber()
-          + " | Balance: " + c.getBalance());
+    for (int i = 0; i < customers.size(); i++) {
+      Customer customer = dealership.getCustomers().get(i);
+      view.show((i + 1) + ". " + customer.getName()
+          + " | Address: " + customer.getAddress()
+          + " | Phone: " + customer.getPhoneNumber()
+          + " | Balance: " + customer.getBalance());
     }
   }
 
   private void showVehicles() {
-    if (dealership.getInventory().isEmpty()) {
+    List<Vehicle> vehicles =dealership.getInventory();
+
+    if (vehicles.isEmpty()) {
       view.show("No vehicles in inventory.");
       return;
     }
 
     view.show("\n--- Vehicle Inventory ---");
-    for (int i = 0; i < dealership.getInventory().size(); i++) {
-      Vehicle v = dealership.getInventory().get(i);
-      view.show((i + 1) + ". " + v.getModel()
-          + " | Type: " + v.getType()
-          + " | Price: " + v.finalPrice()
-          + " | Quantity: " + v.getQuantity());
+    for (int i = 0; i < vehicles.size(); i++) {
+      Vehicle vehicle = vehicles.get(i);
+      view.show((i + 1) + ". " + vehicle.getModel()
+          + " | Type: " + vehicle.getType()
+          + " | Price: " + vehicle.finalPrice()
+          + " | Quantity: " + vehicle.getQuantity());
     }
   }
 
-  public void inputVehicles() {
+  private void inputVehicles() {
     view.show("Enter number of vehicles: ");
     int numberOfVehicle = view.inputInt();
-    view.inputString();
 
     for (int i = 0; i < numberOfVehicle; i++) {
       view.show("\nVehicle " + (i + 1));
@@ -110,89 +113,77 @@ public class Controller {
 
       view.show("Year: ");
       int year = view.inputInt();
-      view.inputString();
 
       view.show("Base price: ");
       BigDecimal price = view.inputBigDecimal();
-      view.inputString();
 
       view.show("Origin: ");
       String origin = view.inputString();
 
       view.show("Quantity: ");
       int quantity = view.inputInt();
-      view.inputString();
 
       view.show("Vehicle type: ");
       String type = view.inputString();
 
-      Vehicle vehicle = createVehicle(choice, model, manufacturer,
-          year, price, origin, quantity, type);
+      Vehicle vehicle = null;
+
+      if (choice.equalsIgnoreCase("Car")) {
+        view.show("Seat: ");
+        int seat = view.inputInt();
+
+
+        view.show("Fuel: ");
+        String fuel = view.inputString();
+
+        view.show("Engine capacity: ");
+        int engine = view.inputInt();
+
+
+        view.show("Body type: ");
+        String bodyType = view.inputString();
+
+        vehicle = VehicleFactory.createCar(model, manufacturer, year, price,
+            origin, quantity, type, seat,
+            fuel, engine, bodyType);
+      } else if (choice.equalsIgnoreCase("Motorbike")) {
+        view.show("Engine capacity: ");
+        int engine = view.inputInt();
+
+        view.show("Motorbike type: ");
+        String typeMotorbike = view.inputString();
+
+        view.show("Power: ");
+        String power = view.inputString();
+
+        vehicle = VehicleFactory.createMotorbike(
+            model, manufacturer, year, price,
+            origin, quantity, type,
+            engine, typeMotorbike, power);
+      } else if (choice.equalsIgnoreCase("Bike")) {
+        view.show("Bicycle type: ");
+        String typeBike = view.inputString();
+
+        view.show("Frame material: ");
+        String frame = view.inputString();
+
+        vehicle = VehicleFactory.createBicycle(
+            model, manufacturer, year, price,
+            origin, quantity, type,
+            frame, typeBike);
+      }
 
       if (vehicle != null) {
         dealership.addVehicle(vehicle);
-        view.show("Vehicle added successfully.");
+        view.show("Vehicle added.");
       } else {
-        view.show("Invalid vehicle type!");
+        view.show("Invalid vehicle type.");
       }
     }
   }
-
-  private Vehicle createVehicle(String choice, String model, String manufacturer,
-      int year, BigDecimal price, String origin, int quantity, String type) {
-
-    if (choice.equalsIgnoreCase("Car")) {
-      view.show("Seat: ");
-      int seat = view.inputInt();
-      view.inputString();
-
-      view.show("Fuel: ");
-      String fuel = view.inputString();
-
-      view.show("Engine capacity: ");
-      int engine = view.inputInt();
-      view.inputString();
-
-      view.show("Body type: ");
-      String bodyType = view.inputString();
-
-      return new Car(model, manufacturer, year, price, origin,
-          quantity, type, seat, fuel, engine,bodyType);
-    }
-
-    if (choice.equalsIgnoreCase("Motorbike")) {
-      view.show("Engine capacity: ");
-      int engine = view.inputInt();
-      view.inputString();
-
-      view.show("Motorbike type: ");
-      String typeMotorbike = view.inputString();
-
-      view.show("Power: ");
-      String power = view.inputString();
-
-      return new Motorbike(model, manufacturer, year, price, origin,
-          quantity, type, engine, typeMotorbike, power);
-    }
-
-    if (choice.equalsIgnoreCase("Bike")) {
-      view.show("Bicycle type: ");
-      String typeBike = view.inputString();
-
-      view.show("Frame material: ");
-      String frame = view.inputString();
-
-      return new Bicycle(model, manufacturer, year, price, origin,
-          quantity, type, frame, typeBike);
-    }
-
-    return null;
-  }
-
-  public void inputCustomers() {
+  private void inputCustomers() {
     view.show("Enter number of customers: ");
     int numberOfCustomer = view.inputInt();
-    view.inputString();
 
     for (int i = 0; i < numberOfCustomer; i++) {
       view.show("\nCustomer " + (i + 1));
@@ -208,56 +199,35 @@ public class Controller {
 
       view.show("Balance: ");
       BigDecimal balance = view.inputBigDecimal();
-      view.inputString();
 
-      Customer customer = new Customer(name, address, phone, balance);
-      dealership.addCustomer(customer);
+      dealership.addCustomer(name, address, phone, balance);
 
       view.show("Customer added successfully.");
     }
   }
 
   private void buyVehicle() {
-    if (dealership.getCustomers().isEmpty()
-        || dealership.getInventory().isEmpty()) {
-      view.show("Need at least 1 customer and 1 vehicle.");
-      return;
-    }
+    try {
+      showCustomers();
+      view.show("Choose customer: ");
+      int chooseCustomer = view.inputInt() - 1;
 
-    showCustomers();
-    view.show("Choose customer: ");
-    int chooseCustomer = view.inputInt() - 1;
-    view.inputString();
+      showVehicles();
+      view.show("Choose vehicle: ");
+      int chooseVehicle = view.inputInt() - 1;
 
-    if (chooseCustomer < 0 || chooseCustomer >= dealership.getCustomers().size()) {
-      view.show("Invalid customer!");
-      return;
-    }
+      dealership.buyVehicle(chooseCustomer, chooseVehicle);
 
-    Customer customer = dealership.getCustomers().get(chooseCustomer);
-
-    showVehicles();
-    view.show("Choose vehicle: ");
-    int chooseVehicle = view.inputInt() - 1;
-    view.inputString();
-
-    if (chooseVehicle < 0 || chooseVehicle >= dealership.getInventory().size()) {
-      view.show("Invalid vehicle!");
-      return;
-    }
-
-    Vehicle vehicle = dealership.getInventory().get(chooseVehicle);
-
-    if (dealership.sellVehicle(vehicle, customer)) {
       view.show("Purchase successful!");
-    } else {
-      view.show("Purchase failed!");
-      suggestAlternatives(vehicle.getType());
+
+    } catch (BaseException e) {
+      view.show("Purchase failed: " + e.getMessage());
     }
   }
 
+
   private void suggestAlternatives(String type) {
-    ArrayList<Vehicle> alternatives = dealership.suggestAlternative(type);
+    ArrayList<Vehicle> alternatives = dealership.suggestAlternatives(type);
 
     if (alternatives.isEmpty()) {
       view.show("No alternative available.");
