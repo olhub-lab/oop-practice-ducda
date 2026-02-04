@@ -10,6 +10,7 @@ import java.util.List;
 import model.Customer;
 import model.Dealership;
 import model.Vehicle;
+import view.DealershipView;
 
 public class DealershipService {
 
@@ -29,7 +30,70 @@ public class DealershipService {
     return dealership.getCustomers();
   }
 
-  public void addVehicle(Vehicle vehicle) {
+  public void creatVehicle(
+      String type,      String model,
+      String manufacturer,
+      int year,
+      BigDecimal basePrice,
+      String origin,
+      int quantity,
+      DealershipView view
+  ) {
+    Vehicle vehicle = null;
+
+    if (type.equalsIgnoreCase("Car")) {
+      view.show("Seat: ");
+      int seat = view.inputInt();
+
+      view.show("Fuel: ");
+      String fuel = view.inputString();
+
+      view.show("Engine capacity: ");
+      int engineCapacity = view.inputInt();
+
+      view.show("Body type: ");
+      String bodyType = view.inputString();
+
+      vehicle = VehicleFactory.createCar(model, manufacturer, year, basePrice,
+          origin, quantity, type, seat,
+          fuel, engineCapacity, bodyType);
+
+    } else if (type.equalsIgnoreCase("Motorbike")) {
+      view.show("Engine capacity: ");
+      int engineCapacity = view.inputInt();
+
+      view.show("Motorbike type: ");
+      String typeMotorbike = view.inputString();
+
+      view.show("Power: ");
+      String power = view.inputString();
+
+      vehicle = VehicleFactory.createMotorbike(
+          model, manufacturer, year, basePrice,
+          origin, quantity, type,
+          engineCapacity, typeMotorbike, power);
+
+    } else if (type.equalsIgnoreCase("Bike")) {
+      view.show("Bicycle type: ");
+      String typeBicycle = view.inputString();
+
+      view.show("Frame material: ");
+      String frameMaterial = view.inputString();
+
+      vehicle = VehicleFactory.createBicycle(
+          model, manufacturer, year, basePrice,
+          origin, quantity, type,
+          frameMaterial, typeBicycle);
+
+    }
+    if (vehicle == null) {
+      throw new IllegalArgumentException("Invalid vehicle type");
+    }
+
+    addVehicle(vehicle);
+  }
+
+  private void addVehicle(Vehicle vehicle) {
     dealership.addVehicle(vehicle);
   }
 

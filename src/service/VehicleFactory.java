@@ -9,33 +9,33 @@ public class VehicleFactory {
 
   public static Car createCar(
       String model, String manufacturer, int year,
-      BigDecimal price, String origin, int quantity,
+      BigDecimal basePrice, String origin, int quantity,
       String type, int seat, String fuel,
-      int engine, String bodyType) {
+      int engineCapacity, String bodyType) {
 
-    return new Car(model, manufacturer, year, price,
+    return new Car(model, manufacturer, year, basePrice,
         origin, quantity, type,
-        seat, fuel, engine, bodyType);
+        seat, fuel, engineCapacity, bodyType);
   }
 
   public static Motorbike createMotorbike(
       String model, String manufacturer, int year,
-      BigDecimal price, String origin, int quantity,
-      String type, int engine,
+      BigDecimal basePrice, String origin, int quantity,
+      String type, int engineCapacity,
       String motorbikeType, String power) {
 
-    return new Motorbike(model, manufacturer, year, price,
+    return new Motorbike(model, manufacturer, year, basePrice,
         origin, quantity, type,
-        engine, motorbikeType, power);
+        engineCapacity, motorbikeType, power);
   }
 
   public static Bicycle createBicycle(
       String model, String manufacturer, int year,
-      BigDecimal price, String origin, int quantity,
-      String type, String frame, String bikeType) {
+      BigDecimal basePrice, String origin, int quantity,
+      String type, String frameMaterial, String typeBicycle) {
 
-    return new Bicycle(model, manufacturer, year, price,
+    return new Bicycle(model, manufacturer, year, basePrice,
         origin, quantity, type,
-        frame, bikeType);
+        frameMaterial, typeBicycle);
   }
 }

@@ -1,6 +1,5 @@
 package model;
 
-import exceptions.OutOfStockException;
 import java.math.BigDecimal;
 
 public abstract class Vehicle {

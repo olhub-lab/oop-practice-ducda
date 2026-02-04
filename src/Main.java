@@ -1,7 +1,7 @@
-import controller.Controller;
+import controller.DealershipController;
 import model.Dealership;
 import service.DealershipService;
-import view.View;
+import view.DealershipView;
 
 public class Main {
   public static void main(String[] args) {
@@ -10,9 +10,9 @@ public class Main {
 
     DealershipService dealershipService = new DealershipService(dealership);
 
-    View view = new View();
+    DealershipView view = new DealershipView();
 
-    Controller controller = new Controller(dealershipService, view);
+    DealershipController controller = new DealershipController(dealershipService, view);
 
     controller.run();
   }
