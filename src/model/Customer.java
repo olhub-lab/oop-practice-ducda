@@ -6,6 +6,7 @@ import java.util.List;
 
 public class Customer {
 
+  private int idCustomer;
   private String name;
   private String address;
   private String phoneNumber;
@@ -17,12 +18,16 @@ public class Customer {
   private static final int MAX_LEVEL_GOLD = 7;
   private static final int MIN_LEVEL_PLATINUM = 8;
 
-  public Customer(String name, String address, String phoneNumber, BigDecimal balance) {
+  public Customer() {
+  }
+
+  public Customer(int idCustomer,String name, String address, String phoneNumber, BigDecimal balance) {
+    this.idCustomer = idCustomer;
     this.name = name;
     this.address = address;
     this.phoneNumber = phoneNumber;
     this.balance = balance;
-    this.purchaseHistory = new ArrayList<Vehicle>();
+//    this.purchaseHistory = new ArrayList<Vehicle>();
   }
 
 
@@ -66,6 +71,10 @@ public class Customer {
     return purchaseHistory.size();
   }
 
+  public int getIdCustomer() {
+    return idCustomer;
+  }
+
   public String getName() {
     return name;
   }
@@ -84,5 +93,9 @@ public class Customer {
 
   public List<Vehicle> getPurchaseHistory() {
     return purchaseHistory;
+  }
+
+  public void setIdCustomer(int idCustomer) {
+    this.idCustomer = idCustomer;
   }
 }

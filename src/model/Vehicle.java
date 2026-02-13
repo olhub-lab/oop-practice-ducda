@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 public abstract class Vehicle {
 
+  protected int idVehicle;
   protected String model;
   protected String manufacturer;
   protected int year;
@@ -13,13 +14,18 @@ public abstract class Vehicle {
   protected int quantity;
   protected String type;
 
-  public Vehicle( String model,
+  public Vehicle() {
+  }
+
+  public Vehicle( int idVehicle,
+                  String model,
                   String manufacturer,
                   int year,
                   BigDecimal basePrice,
                   String origin,
                   int quantity,
                   String type) {
+    this.idVehicle = idVehicle;
     this.model = model;
     this.manufacturer = manufacturer;
     this.year = year;
@@ -80,5 +86,15 @@ public abstract class Vehicle {
     return type;
   }
 
+  public int getIdVehicle() {
+    return idVehicle;
+  }
 
+  public void setIdVehicle(int idVehicle) {
+    this.idVehicle = idVehicle;
+  }
+
+  public void setQuantity(int quantity) {
+    this.quantity = quantity;
+  }
 }

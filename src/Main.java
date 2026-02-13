@@ -1,3 +1,8 @@
+import database.JDBCUtil;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 import controller.DealershipController;
 import model.Dealership;
 import service.DealershipService;
@@ -13,7 +18,7 @@ public class Main {
     DealershipView view = new DealershipView();
 
     DealershipController controller = new DealershipController(dealershipService, view);
-
     controller.run();
   }
 }
+
