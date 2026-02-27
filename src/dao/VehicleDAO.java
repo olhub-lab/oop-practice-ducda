@@ -1,7 +1,6 @@
 package dao;
 
 import database.JDBCUtil;
-import java.awt.desktop.PreferencesEvent;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,9 +8,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.List;
 import model.Bicycle;
 import model.Car;
-import model.Customer;
 import model.Motorbike;
 import model.Vehicle;
 import service.VehicleFactory;
@@ -23,14 +22,6 @@ public class VehicleDAO implements DAOInterface<Vehicle> {
     int result = 0;
     try {
       Connection connection = JDBCUtil.getConnection();
-
-//      Statement statement = connection.createStatement();
-//
-//      String query = "INSERT INTO vehicle (idVehicle, model,manufacturer,year,basePrice,origin,quantity,type)  " +
-//                      "VALUES ('"+vehicle.getIdVehicle()+" ','"+vehicle.getModel()+" ' ,"
-//                      + ""+vehicle.getManufacturer()+","+vehicle.getYear()+","
-//                      + ""+vehicle.getBasePrice()+","+vehicle.getOrigin()+","
-//                      + ""+vehicle.getQuantity()+",'"+vehicle.getType()+"')";
 
       String query =
           "INSERT INTO vehicle (idVehicle, model,manufacturer,year,basePrice,"
@@ -114,7 +105,6 @@ public class VehicleDAO implements DAOInterface<Vehicle> {
 
       String query = "UPDATE vehicle " +
           "SET " +
-//                    "idVehicle=?"+
           "model=?" +
           ",manufacturer=?" +
           ",year=?" +
@@ -243,41 +233,125 @@ public class VehicleDAO implements DAOInterface<Vehicle> {
       ResultSet resultSet = preparedStatement.executeQuery();
 
       if (resultSet.next()) {
+
+        int id = resultSet.getInt("idVehicle");
+        String model = resultSet.getString("model");
+        String manufacturer = resultSet.getString("manufacturer");
+        int year = resultSet.getInt("year");
+        BigDecimal basePrice = resultSet.getBigDecimal("basePrice");
+        String origin = resultSet.getString("origin");
+        int quantity = resultSet.getInt("quantity");
         String type = resultSet.getString("type");
+
+        String typeBicycle = resultSet.getString("typeBicycle");
+        String frameMaterial = resultSet.getString("frameMaterial");
+
+        int seat = resultSet.getInt("seat");
+        String fuel = resultSet.getString("fuel");
+        int engineCapacityCar = resultSet.getInt("engineCapacityCar");
+        String bodyType = resultSet.getString("bodyType");
+
+        int engineCapacityMotorbike = resultSet.getInt("engineCapacityMotorbike");
+        String motorbikeType = resultSet.getString("typeMotorbike");
+        String power = resultSet.getString("power");
+
         switch (type.toLowerCase()) {
           case "car":
-            vehicle = new Car();
+            vehicle = VehicleFactory.createCar(
+                id, model, manufacturer, year, basePrice,
+                origin, quantity, type,
+                seat, fuel, engineCapacityCar, bodyType
+            );
+            break;
+
+          case "bicycle":
+            vehicle = VehicleFactory.createBicycle(
+                id, model, manufacturer, year, basePrice,
+                origin, quantity, type,
+                frameMaterial, typeBicycle
+            );
+            break;
+
+          case "motorbike":
+            vehicle = VehicleFactory.createMotorbike(
+                id, model, manufacturer, year, basePrice,
+                origin, quantity, type,
+                engineCapacityMotorbike, motorbikeType, power
+            );
+            break;
+        }
+      }
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+
+    return vehicle;
+  }
+
+
+  public List<Vehicle> suggestVehicles(Connection connection, BigDecimal balance) {
+    List<Vehicle> suggestedVehicles = new ArrayList<>();
+
+    try {
+      String sql = "SELECT * FROM vehicle WHERE basePrice <= ?";
+
+      PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+      preparedStatement.setBigDecimal(1, balance);
+
+      ResultSet resultSet = preparedStatement.executeQuery();
+
+      while (resultSet.next()) {
+        int idVehicle = resultSet.getInt("idVehicle");
+        String model = resultSet.getString("model");
+        String manufacturer = resultSet.getString("manufacturer");
+        int year = resultSet.getInt("year");
+        BigDecimal basePrice = resultSet.getBigDecimal("basePrice");
+        String origin = resultSet.getString("origin");
+        int quantity = resultSet.getInt("quantity");
+        String type = resultSet.getString("type");
+
+        String typeBicycle = resultSet.getString("typeBicycle");
+        String frameMaterial = resultSet.getString("frameMaterial");
+
+        int seat = resultSet.getInt("seat");
+        String fuel = resultSet.getString("fuel");
+        int engineCapacityCar = resultSet.getInt("engineCapacityCar");
+        String bodyType = resultSet.getString("bodyType");
+
+        int engineCapacityMotorbike = resultSet.getInt("engineCapacityMotorbike");
+        String motorbikeType = resultSet.getString("typeMotorbike");
+        String power = resultSet.getString("power");
+
+        Vehicle vehicle = null;
+
+        switch (type.toLowerCase()) {
+          case "car":
+            vehicle = VehicleFactory.createCar(idVehicle, model, manufacturer, year, basePrice,
+                origin, quantity, type,
+                seat, fuel, engineCapacityCar, bodyType);
             break;
           case "bicycle":
-            vehicle = new Bicycle();
+            vehicle = VehicleFactory.createBicycle(idVehicle, model, manufacturer, year, basePrice,
+                origin, quantity, type,
+                frameMaterial, typeBicycle);
             break;
           case "motorbike":
-            vehicle = new Motorbike();
+            vehicle = VehicleFactory.createMotorbike(idVehicle, model, manufacturer, year,
+                basePrice, origin, quantity, type,
+                engineCapacityMotorbike, motorbikeType, power);
             break;
           default:
             vehicle = null;
         }
-        vehicle.setIdVehicle(resultSet.getInt("idVehicle"));
-        vehicle.setQuantity(resultSet.getInt("quantity"));
-
+        if (vehicle != null) {
+          suggestedVehicles.add(vehicle);
+        }
       }
     } catch (SQLException e) {
       e.printStackTrace();
     }
-    return vehicle;
-  }
-
-  public void decreaseQuantity(Connection connection, int idVehicle) {
-    try {
-      String sql = "UPDATE vehicle SET quantity = quantity - 1 WHERE idVehicle=?";
-
-      PreparedStatement preparedStatement = connection.prepareStatement(sql);
-
-      preparedStatement.setInt(1, idVehicle);
-
-      preparedStatement.executeUpdate();
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
+    return suggestedVehicles;
   }
 }

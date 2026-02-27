@@ -6,9 +6,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class JDBCUtil {
-  public static Connection getConnection() {
-    Connection conn = null;
 
+  public static Connection getConnection() {
+    Connection connection = null;
     try {
 
       DriverManager.registerDriver(new Driver());
@@ -17,20 +17,19 @@ public class JDBCUtil {
       String user = "root";
       String password = "dinhanhduc2006";
 
-      conn = DriverManager.getConnection(url, user, password);
+      return DriverManager.getConnection(url, user, password);
     } catch (SQLException e) {
       e.printStackTrace();
     }
-
-    return conn;
+    return connection;
   }
 
-  public static void closeConnection(Connection conn) {
+  public static void closeConnection(Connection connection) {
     try {
-      if (conn != null) {
-        conn.close();
+      if (connection != null) {
+        connection.close();
       }
-    }catch (SQLException e){
+    } catch (SQLException e) {
       e.printStackTrace();
     }
   }

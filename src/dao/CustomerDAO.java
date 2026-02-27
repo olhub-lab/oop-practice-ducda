@@ -36,12 +36,40 @@ public class CustomerDAO implements DAOInterface<Customer> {
       e.printStackTrace();
     }
 
-    return 0;
+    return result;
   }
 
   @Override
   public int update(Customer customer) {
-    return 0;
+
+    int result = 0;
+
+    try {
+      Connection connection = JDBCUtil.getConnection();
+
+      String query = "UPDATE customer " +
+          "SET " +
+          "name=?," +
+          "address=?," +
+          "phoneNumber=?," +
+          "balance=? " +
+          "WHERE idCustomer=?";
+
+      PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+      preparedStatement.setString(1, customer.getName());
+      preparedStatement.setString(2, customer.getAddress());
+      preparedStatement.setString(3, customer.getPhoneNumber());
+      preparedStatement.setBigDecimal(4, customer.getBalance());
+      preparedStatement.setInt(5, customer.getIdCustomer());
+
+      result = preparedStatement.executeUpdate();
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+
+    return result;
   }
 
   @Override
@@ -94,25 +122,14 @@ public class CustomerDAO implements DAOInterface<Customer> {
       if (resultSet.next()) {
         customer = new Customer();
         customer.setIdCustomer(resultSet.getInt("idCustomer"));
+        customer.setName(resultSet.getString("name"));
+        customer.setAddress(resultSet.getString("address"));
+        customer.setPhoneNumber(resultSet.getString("phoneNumber"));
+        customer.setBalance(resultSet.getBigDecimal("balance"));
       }
     } catch (SQLException e) {
       e.printStackTrace();
     }
     return customer;
-  }
-
-  public void decreaseBalance(Connection connection, int idCustomer, BigDecimal basePrice) {
-    try {
-      String sql = "UPDATE customer SET balance = balance - ? WHERE idCustomer = ?";
-
-      PreparedStatement preparedStatement = connection.prepareStatement(sql);
-
-      preparedStatement.setBigDecimal(1, basePrice);
-      preparedStatement.setInt(2, idCustomer);
-
-      preparedStatement.executeUpdate();
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
   }
 }

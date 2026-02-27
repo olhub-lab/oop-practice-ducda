@@ -17,14 +17,14 @@ public abstract class Vehicle {
   public Vehicle() {
   }
 
-  public Vehicle( int idVehicle,
-                  String model,
-                  String manufacturer,
-                  int year,
-                  BigDecimal basePrice,
-                  String origin,
-                  int quantity,
-                  String type) {
+  public Vehicle(int idVehicle,
+      String model,
+      String manufacturer,
+      int year,
+      BigDecimal basePrice,
+      String origin,
+      int quantity,
+      String type) {
     this.idVehicle = idVehicle;
     this.model = model;
     this.manufacturer = manufacturer;
@@ -54,7 +54,7 @@ public abstract class Vehicle {
     return quantity > 0;
   }
 
-  public void minusQuantity(){
+  public void minusQuantity() {
     quantity--;
   }
 

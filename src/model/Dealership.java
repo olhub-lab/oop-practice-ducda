@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Dealership {
+
   private String name;
   private List<Vehicle> inventory = new ArrayList<>();
   private List<Customer> customers = new ArrayList<>();
@@ -46,9 +47,9 @@ public class Dealership {
   public boolean sellVehicle(Vehicle vehicle, Customer customer) {
     if (!vehicle.checkInventory()) {
       System.out.println("Vehicle Not Enough");
-      return false; 
+      return false;
     }
-    if(!customer.enoughMoney(vehicle.finalPrice())) {
+    if (!customer.enoughMoney(vehicle.finalPrice())) {
       System.out.println("Customer Not Enough");
       return false;
     }

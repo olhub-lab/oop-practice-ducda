@@ -1,13 +1,15 @@
 package dao;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 
-public interface DAOInterface <Object> {
-  public int insert(Object object);
+public interface DAOInterface<T> {
 
-  public int update(Object object);
+  public int insert(T object);
 
-  public int delete(Object object);
+  public int update(T object);
 
-  public ArrayList<Object> selectAll();
+  public int delete(T object);
+
+  public ArrayList<T> selectAll();
 }

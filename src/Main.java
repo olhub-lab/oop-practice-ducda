@@ -1,8 +1,3 @@
-import database.JDBCUtil;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-
 import controller.DealershipController;
 import model.Dealership;
 import service.DealershipService;

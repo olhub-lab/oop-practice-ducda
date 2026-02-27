@@ -1,7 +1,6 @@
 package model;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Customer {
@@ -21,13 +20,13 @@ public class Customer {
   public Customer() {
   }
 
-  public Customer(int idCustomer,String name, String address, String phoneNumber, BigDecimal balance) {
+  public Customer(int idCustomer, String name, String address, String phoneNumber,
+      BigDecimal balance) {
     this.idCustomer = idCustomer;
     this.name = name;
     this.address = address;
     this.phoneNumber = phoneNumber;
     this.balance = balance;
-//    this.purchaseHistory = new ArrayList<Vehicle>();
   }
 
 
@@ -39,13 +38,14 @@ public class Customer {
   }
 
 
-
-  LoyaltyLevel loyaltyLevel() {
-    if (getOwnedVehiclesCount() >= MIN_LEVEL_SILVER && getOwnedVehiclesCount() <= MAX_LEVEL_SILVER) {
+  public LoyaltyLevel loyaltyLevel() {
+    if (getOwnedVehiclesCount() >= MIN_LEVEL_SILVER
+        && getOwnedVehiclesCount() <= MAX_LEVEL_SILVER) {
       return LoyaltyLevel.SILVER;
-    }else if (getOwnedVehiclesCount()>=MIN_LEVEL_GOLD && getOwnedVehiclesCount() <= MAX_LEVEL_GOLD) {
+    } else if (getOwnedVehiclesCount() >= MIN_LEVEL_GOLD
+        && getOwnedVehiclesCount() <= MAX_LEVEL_GOLD) {
       return LoyaltyLevel.GOLD;
-    } else if (getOwnedVehiclesCount() >= MIN_LEVEL_PLATINUM)  {
+    } else if (getOwnedVehiclesCount() >= MIN_LEVEL_PLATINUM) {
       return LoyaltyLevel.PLATINUM;
     }
     return LoyaltyLevel.REGULAR;
@@ -97,5 +97,21 @@ public class Customer {
 
   public void setIdCustomer(int idCustomer) {
     this.idCustomer = idCustomer;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public void setAddress(String address) {
+    this.address = address;
+  }
+
+  public void setPhoneNumber(String phoneNumber) {
+    this.phoneNumber = phoneNumber;
+  }
+
+  public void setBalance(BigDecimal balance) {
+    this.balance = balance;
   }
 }

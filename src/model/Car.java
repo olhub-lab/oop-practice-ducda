@@ -17,11 +17,12 @@ public class Car extends Vehicle {
   public Car() {
   }
 
-  public Car(int idVehicle, String model, String manufacturer, int year, BigDecimal basePrice, String origin,
+  public Car(int idVehicle, String model, String manufacturer, int year, BigDecimal basePrice,
+      String origin,
       int quantity, String type,
       int seat,
       String fuel, int engineCapacity, String bodyType) {
-    super(idVehicle,model, manufacturer, year, basePrice, origin, quantity, type);
+    super(idVehicle, model, manufacturer, year, basePrice, origin, quantity, type);
     this.seat = seat;
     this.fuel = fuel;
     this.engineCapacity = engineCapacity;

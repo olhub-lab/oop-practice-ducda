@@ -13,7 +13,7 @@ public class VehicleFactory {
       String type, int seat, String fuel,
       int engineCapacity, String bodyType) {
 
-    return new Car(idVehicle,model, manufacturer, year, basePrice,
+    return new Car(idVehicle, model, manufacturer, year, basePrice,
         origin, quantity, type,
         seat, fuel, engineCapacity, bodyType);
   }
@@ -24,7 +24,7 @@ public class VehicleFactory {
       String type, int engineCapacity,
       String motorbikeType, String power) {
 
-    return new Motorbike(idVehicle,model, manufacturer, year, basePrice,
+    return new Motorbike(idVehicle, model, manufacturer, year, basePrice,
         origin, quantity, type,
         engineCapacity, motorbikeType, power);
   }
@@ -34,7 +34,7 @@ public class VehicleFactory {
       BigDecimal basePrice, String origin, int quantity,
       String type, String frameMaterial, String typeBicycle) {
 
-    return new Bicycle(idVehicle,model, manufacturer, year, basePrice,
+    return new Bicycle(idVehicle, model, manufacturer, year, basePrice,
         origin, quantity, type,
         frameMaterial, typeBicycle);
   }

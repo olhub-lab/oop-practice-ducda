@@ -12,10 +12,11 @@ public class Bicycle extends Vehicle {
   public Bicycle() {
   }
 
-  public Bicycle(int idVehicle,String model, String manufacturer, int year, BigDecimal basePrice, String origin,
+  public Bicycle(int idVehicle, String model, String manufacturer, int year, BigDecimal basePrice,
+      String origin,
       int quantity, String type,
       String typeBicycle, String frameMaterial) {
-    super(idVehicle,model, manufacturer, year, basePrice, origin, quantity, type);
+    super(idVehicle, model, manufacturer, year, basePrice, origin, quantity, type);
     this.typeBicycle = typeBicycle;
     this.frameMaterial = frameMaterial;
   }

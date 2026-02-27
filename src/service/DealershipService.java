@@ -12,7 +12,6 @@ import exceptions.VehicleNotFoundException;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 import java.util.List;
 import model.Customer;
@@ -113,60 +112,62 @@ public class DealershipService {
     customerDAO.insert(customer);
   }
 
-  public ArrayList<Vehicle> getAllVehicles() {
+  public List<Vehicle> getAllVehicles() {
     return vehicleDAO.selectAll();
   }
 
-  public ArrayList<Customer> getAllCustomers() {
+  public List<Customer> getAllCustomers() {
     return customerDAO.selectAll();
   }
 
 
-//  public void buyVehicle(int idCustomer, int idVehicle) {
-//
-//    Connection connection = null;
-//
-//    try {
-//      connection = JDBCUtil.getConnection();
-//
-//      connection.setAutoCommit(false);
-//
-//      Customer customer = customerDAO.sellectByID(connection, idCustomer);
-//      if (customer == null) {
-//        throw new CustomerNotFoundException("Customer not found");
-//      }
-//      Vehicle vehicle = vehicleDAO.sellectByID(connection, idVehicle);
-//      if (vehicle == null) {
-//        throw new VehicleNotFoundException("Vehicle not found");
-//      }
-//      if (vehicle.getQuantity() <= 0) {
-//        throw new OutOfStockException("Vehicle out of stock");
-//      }
-//      if (customer.getBalance().compareTo(vehicle.getBasePrice()) < 0) {
-//        throw new InsufficientBalanceException("Not enough balance");
-//      }
-//
-//      customerDAO.decreaseBalance(connection, idCustomer, vehicle.getBasePrice());
-//
-//      vehicleDAO.decreaseQuantity(connection, idVehicle);
-//
-//      connection.commit();
-//
-//    } catch (SQLException e) {
-//      if (connection != null) {
-//        try {
-//          connection.rollback();
-//        } catch (SQLException ex) {
-//          ex.printStackTrace();
-//        }
-//      }
-//    }
-//    finally {
-//      JDBCUtil.closeConnection(connection);
-//    }
-//  }
+  public void buyVehicle(int idCustomer, int idVehicle) {
 
-//  public ArrayList<Vehicle> suggestAlternatives(String type) {
-//    return dealership.suggestAlternative(type);
-//  }
+    Connection connection = null;
+
+    try {
+      connection = JDBCUtil.getConnection();
+
+      connection.setAutoCommit(false);
+
+      Customer customer = customerDAO.sellectByID(connection, idCustomer);
+      if (customer == null) {
+        throw new CustomerNotFoundException("Customer not found");
+      }
+      Vehicle vehicle = vehicleDAO.sellectByID(connection, idVehicle);
+      if (vehicle == null) {
+        throw new VehicleNotFoundException("Vehicle not found");
+      }
+      if (vehicle.getQuantity() <= 0) {
+        throw new OutOfStockException("Vehicle out of stock");
+      }
+      if (customer.getBalance().compareTo(vehicle.getBasePrice()) < 0) {
+
+        List<Vehicle> suggestedVehicles = vehicleDAO.suggestVehicles(connection,
+            customer.getBalance());
+        throw new InsufficientBalanceException("Not enough balance", suggestedVehicles);
+      }
+
+      customer.minusBalance(vehicle.getBasePrice());
+      vehicle.minusQuantity();
+//      customer.addPurchaseHistory(vehicle);
+
+      customerDAO.update(customer);
+      vehicleDAO.update(vehicle);
+
+      connection.commit();
+
+    } catch (SQLException e) {
+      if (connection != null) {
+        try {
+          connection.rollback();
+        } catch (SQLException ex) {
+          ex.printStackTrace();
+        }
+      }
+    } finally {
+      JDBCUtil.closeConnection(connection);
+    }
+  }
+
 }

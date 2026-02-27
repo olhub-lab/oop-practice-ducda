@@ -1,6 +1,6 @@
 package controller;
 
-import exceptions.BaseException;
+import exceptions.InsufficientBalanceException;
 import java.math.BigDecimal;
 import java.util.List;
 import model.Customer;
@@ -35,9 +35,9 @@ public class DealershipController {
         case 4:
           inputCustomers();
           break;
-//        case 5:
-//          buyVehicle();
-//          break;
+        case 5:
+          buyVehicle();
+          break;
         case 0:
           view.show("bye");
           return;
@@ -121,28 +121,32 @@ public class DealershipController {
     }
   }
 
-//  private void buyVehicle() {
-//    try {
-//      List<Customer> customers = dealership.getAllCustomers();
-//      List<Vehicle> vehicles = dealership.getAllVehicles();
-//
-//      int chooseCustomer = view.chooseCustomer(customers);
-//      int chooseVehicle = view.chooseVehicle(vehicles);
-//
-//      Customer customer = customers.get(chooseCustomer);
-//      Vehicle vehicle = vehicles.get(chooseVehicle);
-//
-//      dealership.buyVehicle(customer.getIdCustomer(), vehicle.getIdVehicle());
-//
-//      view.show("Purchase successful!");
-//
-//    } catch (BaseException e) {
-//      view.show("Purchase failed: " + e.getMessage());
-//    }
-//  }
+  private void buyVehicle() {
+    try {
+      List<Customer> customers = dealership.getAllCustomers();
+      List<Vehicle> vehicles = dealership.getAllVehicles();
 
-//  private void suggestAlternatives(String type) {
-//    List<Vehicle> alternatives = dealership.suggestAlternatives(type);
-//    view.showSuggestedVehicles(alternatives);
-//  }
+      int chooseCustomer = view.chooseCustomer(customers);
+      int chooseVehicle = view.chooseVehicle(vehicles);
+
+      Customer customer = customers.get(chooseCustomer);
+      Vehicle vehicle = vehicles.get(chooseVehicle);
+
+      dealership.buyVehicle(customer.getIdCustomer(), vehicle.getIdVehicle());
+
+      view.show("Purchase successful!");
+
+    } catch (InsufficientBalanceException e) {
+      System.out.println(e.getMessage());
+
+      System.out.println("Suggested vehicles");
+
+      for (Vehicle vehicle : e.getSuggestedVehicles()) {
+        System.out.println(
+            vehicle.getIdVehicle() + "|" + vehicle.getModel() + "|" + vehicle.getBasePrice());
+      }
+    }
+  }
+
+
 }
