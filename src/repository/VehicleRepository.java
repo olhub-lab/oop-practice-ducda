@@ -1,21 +1,22 @@
 package repository;
 
 import java.util.ArrayList;
+import model.Vehicle;
 
-public class VehicleRepository implements RepositoryInterface{
+public class VehicleRepository implements RepositoryInterface<Vehicle>{
 
   @Override
-  public int insert(Object object) {
+  public int insert(Vehicle object) {
     return 0;
   }
 
   @Override
-  public int update(Object object) {
+  public int update(Vehicle object) {
     return 0;
   }
 
   @Override
-  public int delete(Object object) {
+  public int delete(Vehicle object) {
     return 0;
   }
 
