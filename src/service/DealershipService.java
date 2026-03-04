@@ -1,11 +1,18 @@
+
 package service;
 
+import dao.CustomerDAO;
+import dao.VehicleDAO;
+import database.JDBCUtil;
 import exceptions.CustomerNotFoundException;
 import exceptions.InsufficientBalanceException;
 import exceptions.OutOfStockException;
 import exceptions.VehicleNotFoundException;
+
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.SQLException;
+
 import java.util.List;
 import model.Customer;
 import model.Dealership;
@@ -14,24 +21,17 @@ import view.DealershipView;
 
 public class DealershipService {
 
-  private Dealership dealership;
+  private VehicleDAO vehicleDAO = new VehicleDAO();
+
+  private CustomerDAO customerDAO = new CustomerDAO();
 
   public DealershipService(Dealership dealership) {
-    this.dealership = dealership;
   }
 
-  public void addCustomer(String name, String address,
-      String phone, BigDecimal balance) {
-    Customer customer = new Customer(name, address, phone, balance);
-    dealership.addCustomer(customer);
-  }
-
-  public List<Customer> getCustomers() {
-    return dealership.getCustomers();
-  }
-
-  public void creatVehicle(
-      String type,      String model,
+  public void createVehicle(
+      int idVehicle,
+      String type,
+      String model,
       String manufacturer,
       int year,
       BigDecimal basePrice,
@@ -39,9 +39,11 @@ public class DealershipService {
       int quantity,
       DealershipView view
   ) {
+
     Vehicle vehicle = null;
 
-    if (type.equalsIgnoreCase("Car")) {
+    if (type.equalsIgnoreCase("car")) {
+
       view.show("Seat: ");
       int seat = view.inputInt();
 
@@ -54,11 +56,14 @@ public class DealershipService {
       view.show("Body type: ");
       String bodyType = view.inputString();
 
-      vehicle = VehicleFactory.createCar(model, manufacturer, year, basePrice,
-          origin, quantity, type, seat,
-          fuel, engineCapacity, bodyType);
+      vehicle = VehicleFactory.createCar(idVehicle,
+          model, manufacturer, year, basePrice,
+          origin, quantity, type,
+          seat, fuel, engineCapacity, bodyType
+      );
 
-    } else if (type.equalsIgnoreCase("Motorbike")) {
+    } else if (type.equalsIgnoreCase("motorbike")) {
+
       view.show("Engine capacity: ");
       int engineCapacity = view.inputInt();
 
@@ -68,69 +73,101 @@ public class DealershipService {
       view.show("Power: ");
       String power = view.inputString();
 
-      vehicle = VehicleFactory.createMotorbike(
+      vehicle = VehicleFactory.createMotorbike(idVehicle,
           model, manufacturer, year, basePrice,
           origin, quantity, type,
-          engineCapacity, typeMotorbike, power);
+          engineCapacity, typeMotorbike, power
+      );
 
-    } else if (type.equalsIgnoreCase("Bike")) {
+    } else if (type.equalsIgnoreCase("bike")) {
+
       view.show("Bicycle type: ");
       String typeBicycle = view.inputString();
 
       view.show("Frame material: ");
       String frameMaterial = view.inputString();
 
-      vehicle = VehicleFactory.createBicycle(
+      vehicle = VehicleFactory.createBicycle(idVehicle,
           model, manufacturer, year, basePrice,
           origin, quantity, type,
-          frameMaterial, typeBicycle);
-
+          frameMaterial, typeBicycle
+      );
     }
+
     if (vehicle == null) {
       throw new IllegalArgumentException("Invalid vehicle type");
     }
 
-    addVehicle(vehicle);
+    vehicleDAO.insert(vehicle);
   }
 
-  private void addVehicle(Vehicle vehicle) {
-    dealership.addVehicle(vehicle);
+  public void createCustomer(
+      int idCustomer,
+      String name,
+      String address,
+      String phoneNumber,
+      BigDecimal balance
+  ) {
+    Customer customer = new Customer(idCustomer, name, address, phoneNumber, balance);
+    customerDAO.insert(customer);
   }
 
-  public List<Vehicle> getInventory() {
-    return dealership.getInventory();
+  public List<Vehicle> getAllVehicles() {
+    return vehicleDAO.selectAll();
   }
 
-  public void buyVehicle(int chooseCustomer, int chooseVehicle) {
+  public List<Customer> getAllCustomers() {
+    return customerDAO.selectAll();
+  }
 
-    List<Customer> customers = dealership.getCustomers();
-    List<Vehicle> inventory = dealership.getInventory();
 
-    if (chooseCustomer < 0 || chooseCustomer >= customers.size()) {
-      throw new CustomerNotFoundException("Customer not found");
+  public void buyVehicle(int idCustomer, int idVehicle) {
+
+    Connection connection = null;
+
+    try {
+      connection = JDBCUtil.getConnection();
+
+      connection.setAutoCommit(false);
+
+      Customer customer = customerDAO.sellectByID(connection, idCustomer);
+      if (customer == null) {
+        throw new CustomerNotFoundException("Customer not found");
+      }
+      Vehicle vehicle = vehicleDAO.sellectByID(connection, idVehicle);
+      if (vehicle == null) {
+        throw new VehicleNotFoundException("Vehicle not found");
+      }
+      if (vehicle.getQuantity() <= 0) {
+        throw new OutOfStockException("Vehicle out of stock");
+      }
+      if (customer.getBalance().compareTo(vehicle.getBasePrice()) < 0) {
+
+        List<Vehicle> suggestedVehicles = vehicleDAO.suggestVehicles(connection,
+            customer.getBalance());
+        throw new InsufficientBalanceException("Not enough balance", suggestedVehicles);
+      }
+
+      customer.minusBalance(vehicle.getBasePrice());
+      vehicle.minusQuantity();
+//      customer.addPurchaseHistory(vehicle);
+
+      customerDAO.update(customer);
+      vehicleDAO.update(vehicle);
+
+      connection.commit();
+
+    } catch (SQLException e) {
+      if (connection != null) {
+        try {
+          connection.rollback();
+        } catch (SQLException ex) {
+          ex.printStackTrace();
+        }
+      }
+    } finally {
+      JDBCUtil.closeConnection(connection);
     }
-
-    if (chooseVehicle < 0 || chooseVehicle >= inventory.size()) {
-      throw new VehicleNotFoundException("Vehicle not found");
-    }
-
-    Customer customer = customers.get(chooseCustomer);
-    Vehicle vehicle = inventory.get(chooseVehicle);
-
-    if (vehicle.getQuantity() <= 0) {
-      throw new OutOfStockException("Vehicle out of stock");
-    }
-
-    if (!customer.enoughMoney(vehicle.finalPrice())) {
-      throw new InsufficientBalanceException("Not enough balance");
-    }
-
-    customer.minusBalance(vehicle.finalPrice());
-    vehicle.minusQuantity();
-    customer.addPurchaseHistory(vehicle);
   }
 
-  public ArrayList<Vehicle> suggestAlternatives(String type) {
-    return dealership.suggestAlternative(type);
-  }
 }

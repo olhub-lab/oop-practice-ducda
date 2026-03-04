@@ -13,7 +13,7 @@ public class Main {
     DealershipView view = new DealershipView();
 
     DealershipController controller = new DealershipController(dealershipService, view);
-
     controller.run();
   }
 }
+

@@ -1,7 +1,8 @@
 package exceptions;
 
-public class OutOfStockException extends BaseException{
-  public OutOfStockException(String message){
+public class OutOfStockException extends BaseException {
+
+  public OutOfStockException(String message) {
     super(message);
   }
 }

@@ -7,6 +7,7 @@ import model.Customer;
 import model.Vehicle;
 
 public class DealershipView {
+
   private Scanner scanner = new Scanner(System.in);
 
   public int showMenu() {
