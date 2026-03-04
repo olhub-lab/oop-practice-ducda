@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Customer {
 
-  private int idCustomer;
+  private int id;
   private String name;
   private String address;
   private String phoneNumber;
@@ -18,7 +18,8 @@ public class Customer {
   private static final int MAX_LEVEL_GOLD = 7;
   private static final int MIN_LEVEL_PLATINUM = 8;
 
-  public Customer(String name, String address, String phoneNumber, BigDecimal balance) {
+  public Customer(int idCustomer,String name, String address, String phoneNumber, BigDecimal balance) {
+    this.id = idCustomer;
     this.name = name;
     this.address = address;
     this.phoneNumber = phoneNumber;
