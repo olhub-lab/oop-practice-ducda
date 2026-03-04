@@ -6,6 +6,7 @@ import java.util.List;
 
 public class Customer {
 
+  private int idCustomer;
   private String name;
   private String address;
   private String phoneNumber;
@@ -84,5 +85,9 @@ public class Customer {
 
   public List<Vehicle> getPurchaseHistory() {
     return purchaseHistory;
+  }
+
+  public int getIdCustomer() {
+    return idCustomer;
   }
 }
