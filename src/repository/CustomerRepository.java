@@ -1,5 +1,6 @@
 package repository;
 
+import constant.CustomerConstant;
 import database.DBConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,19 +22,28 @@ public class CustomerRepository implements RepositoryInterface<Customer> {
 
       connection.setAutoCommit(false);
 
-      String query = "INSERT INTO customer (idCustomer, name, address, phoneNumber, balance) VALUES (?, ?, ?, ?, ?)";
-
+      String query =
+          "INSERT INTO " + CustomerConstant.TABLE_NAME + "(" + CustomerConstant.COLUMN_ID + ","
+              + CustomerConstant.COLUMN_NAME + ","
+              + CustomerConstant.COLUMN_ADDRESS + ","
+              + CustomerConstant.COLUMN_PHONE_NUMBER + ","
+              + CustomerConstant.COLUMN_BALANCE + ") VALUES(?,?,?,?,?)";
       try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-        preparedStatement.setInt(1, customer.getIdCustomer());
-        preparedStatement.setString(2, customer.getName());
-        preparedStatement.setString(3, customer.getAddress());
-        preparedStatement.setString(4, customer.getPhoneNumber());
-        preparedStatement.setBigDecimal(5, customer.getBalance());
+        int index = 1;
+
+        preparedStatement.setInt(index++, customer.getId());
+        preparedStatement.setString(index++, customer.getName());
+        preparedStatement.setString(index++, customer.getAddress());
+        preparedStatement.setString(index++, customer.getPhoneNumber());
+        preparedStatement.setBigDecimal(index++, customer.getBalance());
 
         result = preparedStatement.executeUpdate();
       }
-
-      connection.commit();
+      if (result > 0) {
+        connection.commit();
+      } else {
+        DatabaseUtil.rollback(connection);
+      }
     } catch (SQLException e) {
       DatabaseUtil.rollback(connection);
 

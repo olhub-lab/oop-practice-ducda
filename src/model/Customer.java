@@ -18,8 +18,8 @@ public class Customer {
   private static final int MAX_LEVEL_GOLD = 7;
   private static final int MIN_LEVEL_PLATINUM = 8;
 
-  public Customer(int idCustomer,String name, String address, String phoneNumber, BigDecimal balance) {
-    this.id = idCustomer;
+  public Customer(int id,String name, String address, String phoneNumber, BigDecimal balance) {
+    this.id = id;
     this.name = name;
     this.address = address;
     this.phoneNumber = phoneNumber;
@@ -88,7 +88,7 @@ public class Customer {
     return purchaseHistory;
   }
 
-  public int getIdCustomer() {
-    return idCustomer;
+  public int getId() {
+    return id;
   }
 }
