@@ -1,6 +1,7 @@
 package repository;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface RepositoryInterface<T> {
 
@@ -10,5 +11,5 @@ public interface RepositoryInterface<T> {
 
   public int delete(T object);
 
-  public ArrayList<T> selectAll();
+  public List<T> selectAll();
 }

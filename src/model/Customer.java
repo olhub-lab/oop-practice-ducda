@@ -18,7 +18,7 @@ public class Customer {
   private static final int MAX_LEVEL_GOLD = 7;
   private static final int MIN_LEVEL_PLATINUM = 8;
 
-  public Customer(int id,String name, String address, String phoneNumber, BigDecimal balance) {
+  public Customer(int id, String name, String address, String phoneNumber, BigDecimal balance) {
     this.id = id;
     this.name = name;
     this.address = address;
@@ -36,13 +36,14 @@ public class Customer {
   }
 
 
-
   LoyaltyLevel loyaltyLevel() {
-    if (getOwnedVehiclesCount() >= MIN_LEVEL_SILVER && getOwnedVehiclesCount() <= MAX_LEVEL_SILVER) {
+    if (getOwnedVehiclesCount() >= MIN_LEVEL_SILVER
+        && getOwnedVehiclesCount() <= MAX_LEVEL_SILVER) {
       return LoyaltyLevel.SILVER;
-    }else if (getOwnedVehiclesCount()>=MIN_LEVEL_GOLD && getOwnedVehiclesCount() <= MAX_LEVEL_GOLD) {
+    } else if (getOwnedVehiclesCount() >= MIN_LEVEL_GOLD
+        && getOwnedVehiclesCount() <= MAX_LEVEL_GOLD) {
       return LoyaltyLevel.GOLD;
-    } else if (getOwnedVehiclesCount() >= MIN_LEVEL_PLATINUM)  {
+    } else if (getOwnedVehiclesCount() >= MIN_LEVEL_PLATINUM) {
       return LoyaltyLevel.PLATINUM;
     }
     return LoyaltyLevel.REGULAR;

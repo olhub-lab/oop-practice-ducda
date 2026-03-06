@@ -13,13 +13,13 @@ public abstract class Vehicle {
   protected int quantity;
   protected String type;
 
-  public Vehicle( String model,
-                  String manufacturer,
-                  int year,
-                  BigDecimal basePrice,
-                  String origin,
-                  int quantity,
-                  String type) {
+  public Vehicle(String model,
+      String manufacturer,
+      int year,
+      BigDecimal basePrice,
+      String origin,
+      int quantity,
+      String type) {
     this.model = model;
     this.manufacturer = manufacturer;
     this.year = year;
@@ -48,7 +48,7 @@ public abstract class Vehicle {
     return quantity > 0;
   }
 
-  public void minusQuantity(){
+  public void minusQuantity() {
     quantity--;
   }
 
