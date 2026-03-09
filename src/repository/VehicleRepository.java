@@ -1,6 +1,6 @@
 package repository;
 
-import java.util.ArrayList;
+import java.util.List;
 import model.Vehicle;
 
 public class VehicleRepository implements RepositoryInterface<Vehicle>{
@@ -21,7 +21,7 @@ public class VehicleRepository implements RepositoryInterface<Vehicle>{
   }
 
   @Override
-  public ArrayList selectAll() {
+  public List selectAll() {
     return null;
   }
 }
