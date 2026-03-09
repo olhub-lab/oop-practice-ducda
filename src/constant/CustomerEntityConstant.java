@@ -1,8 +1,8 @@
 package constant;
 
-public class CustomerConstant {
+public class CustomerEntityConstant {
 
-  private CustomerConstant() {
+  private CustomerEntityConstant() {
 
   }
 

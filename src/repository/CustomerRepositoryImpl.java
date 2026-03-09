@@ -1,6 +1,7 @@
 package repository;
 
-import constant.CustomerConstant;
+import constant.CustomerEntityConstant;
+import constant.CustomerSqlConstant;
 import database.DBConnection;
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -12,7 +13,7 @@ import java.util.List;
 import model.Customer;
 import util.DatabaseUtil;
 
-public class CustomerRepository implements RepositoryInterface<Customer> {
+public class CustomerRepositoryImpl implements RepositoryInterface<Customer> {
 
 
   @Override
@@ -25,13 +26,8 @@ public class CustomerRepository implements RepositoryInterface<Customer> {
 
       connection.setAutoCommit(false);
 
-      String query =
-          "INSERT INTO " + CustomerConstant.TABLE_NAME + "(" + CustomerConstant.COLUMN_ID + ","
-              + CustomerConstant.COLUMN_NAME + ","
-              + CustomerConstant.COLUMN_ADDRESS + ","
-              + CustomerConstant.COLUMN_PHONE_NUMBER + ","
-              + CustomerConstant.COLUMN_BALANCE + ") VALUES(?,?,?,?,?)";
-      try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+      try (PreparedStatement preparedStatement = connection.prepareStatement(
+          CustomerSqlConstant.INSERT_CUSTOMER)) {
         int index = 1;
 
         preparedStatement.setInt(index++, customer.getId());
@@ -67,16 +63,11 @@ public class CustomerRepository implements RepositoryInterface<Customer> {
 
       connection.setAutoCommit(false);
 
-      String query =
-          "UPDATE " + CustomerConstant.TABLE_NAME + " SET "
-              + CustomerConstant.COLUMN_NAME + "=?,"
-              + CustomerConstant.COLUMN_ADDRESS + "=?,"
-              + CustomerConstant.COLUMN_PHONE_NUMBER + "=?,"
-              + CustomerConstant.COLUMN_BALANCE + "=? "
-              + " WHERE " + CustomerConstant.COLUMN_ID + "=?";
+      try (PreparedStatement preparedStatement = connection.prepareStatement(
+          CustomerSqlConstant.UPDATE_CUSTOMER)) {
 
-      try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
         int index = 1;
+
         preparedStatement.setString(index++, customer.getName());
         preparedStatement.setString(index++, customer.getAddress());
         preparedStatement.setString(index++, customer.getPhoneNumber());
@@ -114,16 +105,16 @@ public class CustomerRepository implements RepositoryInterface<Customer> {
       connection = DBConnection.getInstance().getConnection();
       connection.setAutoCommit(false);
 
-      String query = "SELECT * FROM " + CustomerConstant.TABLE_NAME;
-      try (PreparedStatement preparedStatement = connection.prepareStatement(query);
+      try (PreparedStatement preparedStatement = connection.prepareStatement(
+          CustomerSqlConstant.SELECT_ALL_CUSTOMER);
           ResultSet resultSet = preparedStatement.executeQuery()) {
 
         while (resultSet.next()) {
-          int id = resultSet.getInt(CustomerConstant.COLUMN_ID);
-          String name = resultSet.getString(CustomerConstant.COLUMN_NAME);
-          String address = resultSet.getString(CustomerConstant.COLUMN_ADDRESS);
-          String phoneNumber = resultSet.getString(CustomerConstant.COLUMN_PHONE_NUMBER);
-          BigDecimal balance = resultSet.getBigDecimal(CustomerConstant.COLUMN_BALANCE);
+          int id = resultSet.getInt(CustomerEntityConstant.COLUMN_ID);
+          String name = resultSet.getString(CustomerEntityConstant.COLUMN_NAME);
+          String address = resultSet.getString(CustomerEntityConstant.COLUMN_ADDRESS);
+          String phoneNumber = resultSet.getString(CustomerEntityConstant.COLUMN_PHONE_NUMBER);
+          BigDecimal balance = resultSet.getBigDecimal(CustomerEntityConstant.COLUMN_BALANCE);
 
           Customer customer = new Customer(id, name, address, phoneNumber, balance);
 
