@@ -14,11 +14,12 @@ public class Car extends Vehicle {
   private static final BigDecimal EXCISE_TAX_RATE_HIGH = BigDecimal.ONE;
   private static final int ENGINE_CAPACITY_LIMIT = 3000;
 
-  public Car(String model, String manufacturer, int year, BigDecimal basePrice, String origin,
+  public Car(int id, String model, String manufacturer, int year, BigDecimal basePrice,
+      String origin,
       int quantity, String type,
       int seat,
       String fuel, int engineCapacity, String bodyType) {
-    super(model, manufacturer, year, basePrice, origin, quantity, type);
+    super(id, model, manufacturer, year, basePrice, origin, quantity, type);
     this.seat = seat;
     this.fuel = fuel;
     this.engineCapacity = engineCapacity;
@@ -43,5 +44,21 @@ public class Car extends Vehicle {
     } else {
       return taxBase.multiply(EXCISE_TAX_RATE_HIGH);
     }
+  }
+
+  public int getSeat() {
+    return seat;
+  }
+
+  public String getFuel() {
+    return fuel;
+  }
+
+  public int getEngineCapacity() {
+    return engineCapacity;
+  }
+
+  public String getBodyType() {
+    return bodyType;
   }
 }
