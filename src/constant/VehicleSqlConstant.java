@@ -36,5 +36,9 @@ public class VehicleSqlConstant {
           + VehicleEntityConstant.COLUMN_TYPE + "=?,"
           + " WHERE " + VehicleEntityConstant.COLUMN_ID + "=?";
 
-  public static final String SELECT_ALL_VEHICLE = "SELECT * FROM " + VehicleEntityConstant.TABLE_NAME;
+  public static final String SELECT_ALL_VEHICLE =
+      "SELECT * FROM " + VehicleEntityConstant.TABLE_NAME;
+
+  public static final String DELETE_VEHICLE =
+      "DELETE FROM vehicle WHERE id = ?";
 }
