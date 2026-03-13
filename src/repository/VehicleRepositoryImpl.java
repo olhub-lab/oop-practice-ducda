@@ -1,5 +1,7 @@
 package repository;
 
+import constant.CommonConstant;
+import constant.VehicleEntityConstant;
 import constant.VehicleSqlConstant;
 import constant.VehicleTypeConstant;
 import database.DBConnection;
@@ -30,59 +32,60 @@ public class VehicleRepositoryImpl implements RepositoryInterface<Vehicle> {
 
       try (PreparedStatement preparedStatement = connection.prepareStatement(
           VehicleSqlConstant.INSERT_VEHICLE)) {
+        int index = CommonConstant.INDEX;
 
-        preparedStatement.setInt(1, vehicle.getId());
-        preparedStatement.setString(2, vehicle.getModel());
-        preparedStatement.setString(3, vehicle.getManufacturer());
-        preparedStatement.setInt(4, vehicle.getYear());
-        preparedStatement.setBigDecimal(5, vehicle.getBasePrice());
-        preparedStatement.setString(6, vehicle.getOrigin());
-        preparedStatement.setInt(7, vehicle.getQuantity());
-        preparedStatement.setString(8, vehicle.getType());
+        preparedStatement.setInt(index++, vehicle.getId());
+        preparedStatement.setString(index++, vehicle.getModel());
+        preparedStatement.setString(index++, vehicle.getManufacturer());
+        preparedStatement.setInt(index++, vehicle.getYear());
+        preparedStatement.setBigDecimal(index++, vehicle.getBasePrice());
+        preparedStatement.setString(index++, vehicle.getOrigin());
+        preparedStatement.setInt(index++, vehicle.getQuantity());
+        preparedStatement.setString(index++, vehicle.getType());
 
         if (VehicleTypeConstant.BICYCLE.equals(vehicle.getType())) {
           Bicycle bicycle = (Bicycle) vehicle;
 
-          preparedStatement.setString(9, bicycle.getTypeBicycle());
-          preparedStatement.setString(10, bicycle.getFrameMaterial());
+          preparedStatement.setString(index++, bicycle.getTypeBicycle());
+          preparedStatement.setString(index++, bicycle.getFrameMaterial());
 
-          preparedStatement.setNull(11, Types.INTEGER);
-          preparedStatement.setNull(12, Types.VARCHAR);
-          preparedStatement.setNull(13, Types.INTEGER);
-          preparedStatement.setNull(14, Types.VARCHAR);
+          preparedStatement.setNull(index++, Types.INTEGER);
+          preparedStatement.setNull(index++, Types.VARCHAR);
+          preparedStatement.setNull(index++, Types.INTEGER);
+          preparedStatement.setNull(index++, Types.VARCHAR);
 
-          preparedStatement.setNull(15, Types.INTEGER);
-          preparedStatement.setNull(16, Types.VARCHAR);
-          preparedStatement.setNull(17, Types.INTEGER);
+          preparedStatement.setNull(index++, Types.INTEGER);
+          preparedStatement.setNull(index++, Types.VARCHAR);
+          preparedStatement.setNull(index++, Types.INTEGER);
         } else if (VehicleTypeConstant.CAR.equals(vehicle.getType())) {
           Car car = (Car) vehicle;
 
-          preparedStatement.setNull(9, Types.VARCHAR);
-          preparedStatement.setNull(10, Types.VARCHAR);
+          preparedStatement.setNull(index++, Types.VARCHAR);
+          preparedStatement.setNull(index++, Types.VARCHAR);
 
-          preparedStatement.setInt(11, car.getSeat());
-          preparedStatement.setString(12, car.getFuel());
-          preparedStatement.setInt(13, car.getEngineCapacity());
-          preparedStatement.setString(14, car.getBodyType());
+          preparedStatement.setInt(index++, car.getSeat());
+          preparedStatement.setString(index++, car.getFuel());
+          preparedStatement.setInt(index++, car.getEngineCapacity());
+          preparedStatement.setString(index++, car.getBodyType());
 
-          preparedStatement.setNull(15, Types.INTEGER);
-          preparedStatement.setNull(16, Types.VARCHAR);
-          preparedStatement.setNull(17, Types.INTEGER);
+          preparedStatement.setNull(index++, Types.INTEGER);
+          preparedStatement.setNull(index++, Types.VARCHAR);
+          preparedStatement.setNull(index++, Types.INTEGER);
 
         } else if (VehicleTypeConstant.MOTORBIKE.equals(vehicle.getType())) {
           Motorbike motorbike = (Motorbike) vehicle;
 
-          preparedStatement.setNull(9, Types.VARCHAR);
-          preparedStatement.setNull(10, Types.VARCHAR);
+          preparedStatement.setNull(index++, Types.VARCHAR);
+          preparedStatement.setNull(index++, Types.VARCHAR);
 
-          preparedStatement.setNull(11, Types.INTEGER);
-          preparedStatement.setNull(12, Types.VARCHAR);
-          preparedStatement.setNull(13, Types.INTEGER);
-          preparedStatement.setNull(14, Types.VARCHAR);
+          preparedStatement.setNull(index++, Types.INTEGER);
+          preparedStatement.setNull(index++, Types.VARCHAR);
+          preparedStatement.setNull(index++, Types.INTEGER);
+          preparedStatement.setNull(index++, Types.VARCHAR);
 
-          preparedStatement.setInt(15, motorbike.getEngineCapacity());
-          preparedStatement.setString(16, motorbike.getTypeMotorbike());
-          preparedStatement.setString(17, motorbike.getPower());
+          preparedStatement.setInt(index++, motorbike.getEngineCapacity());
+          preparedStatement.setString(index++, motorbike.getTypeMotorbike());
+          preparedStatement.setString(index++, motorbike.getPower());
         }
         result = preparedStatement.executeUpdate();
 
@@ -112,14 +115,16 @@ public class VehicleRepositoryImpl implements RepositoryInterface<Vehicle> {
 
       try (PreparedStatement preparedStatement = connection.prepareStatement(
           VehicleSqlConstant.UPDATE_VEHICLE)) {
-        preparedStatement.setString(1, vehicle.getModel());
-        preparedStatement.setString(2, vehicle.getManufacturer());
-        preparedStatement.setInt(3, vehicle.getYear());
-        preparedStatement.setBigDecimal(4, vehicle.getBasePrice());
-        preparedStatement.setString(5, vehicle.getOrigin());
-        preparedStatement.setInt(6, vehicle.getQuantity());
-        preparedStatement.setString(7, vehicle.getType());
-        preparedStatement.setInt(8, vehicle.getId());
+
+        int index = CommonConstant.INDEX;
+        preparedStatement.setString(index++, vehicle.getModel());
+        preparedStatement.setString(index++, vehicle.getManufacturer());
+        preparedStatement.setInt(index++, vehicle.getYear());
+        preparedStatement.setBigDecimal(index++, vehicle.getBasePrice());
+        preparedStatement.setString(index++, vehicle.getOrigin());
+        preparedStatement.setInt(index++, vehicle.getQuantity());
+        preparedStatement.setString(index++, vehicle.getType());
+        preparedStatement.setInt(index++, vehicle.getId());
 
         result = preparedStatement.executeUpdate();
         if (result > 0) {
@@ -139,8 +144,40 @@ public class VehicleRepositoryImpl implements RepositoryInterface<Vehicle> {
   }
 
   @Override
-  public int delete(Vehicle object) {
-    return 0;
+  public int delete(Vehicle vehicle) {
+
+    int result = 0;
+    Connection connection = null;
+
+    try {
+      connection = DBConnection.getInstance().getConnection();
+      connection.setAutoCommit(false);
+
+      try (PreparedStatement preparedStatement =
+          connection.prepareStatement(VehicleSqlConstant.DELETE_VEHICLE)) {
+
+        int index = CommonConstant.INDEX;
+
+        preparedStatement.setInt(index++, vehicle.getId());
+
+        result = preparedStatement.executeUpdate();
+
+        if (result > 0) {
+          connection.commit();
+        } else {
+          DatabaseUtil.rollback(connection);
+        }
+
+      }
+
+    } catch (SQLException e) {
+      DatabaseUtil.rollback(connection);
+      e.printStackTrace();
+    } finally {
+      DatabaseUtil.closeConnection(connection);
+    }
+
+    return result;
   }
 
   @Override
@@ -156,26 +193,28 @@ public class VehicleRepositoryImpl implements RepositoryInterface<Vehicle> {
           VehicleSqlConstant.SELECT_ALL_VEHICLE)) {
         ResultSet resultSet = preparedStatement.executeQuery();
         while (resultSet.next()) {
-          int id = resultSet.getInt("id");
-          String model = resultSet.getString("model");
-          String manufacturer = resultSet.getString("manufacturer");
-          int year = resultSet.getInt("year");
-          BigDecimal basePrice = resultSet.getBigDecimal("base_price");
-          String origin = resultSet.getString("origin");
-          int quantity = resultSet.getInt("quantity");
-          String type = resultSet.getString("type");
+          int id = resultSet.getInt(VehicleEntityConstant.COLUMN_ID);
+          String model = resultSet.getString(VehicleEntityConstant.COLUMN_MODEL);
+          String manufacturer = resultSet.getString(VehicleEntityConstant.COLUMN_MANUFACTURER);
+          int year = resultSet.getInt(VehicleEntityConstant.COLUMN_YEAR);
+          BigDecimal basePrice = resultSet.getBigDecimal(VehicleEntityConstant.COLUMN_BASE_PRICE);
+          String origin = resultSet.getString(VehicleEntityConstant.COLUMN_ORIGIN);
+          int quantity = resultSet.getInt(VehicleEntityConstant.COLUMN_QUANTITY);
+          String type = resultSet.getString(VehicleEntityConstant.COLUMN_TYPE);
 
-          String typeBicycle = resultSet.getString("type_bicycle");
-          String frameMaterial = resultSet.getString("frame_material");
+          String typeBicycle = resultSet.getString(VehicleEntityConstant.COLUMN_TYPE_BICYCLE);
+          String frameMaterial = resultSet.getString(VehicleEntityConstant.COLUMN_FRAME_MATERIAL);
 
-          int seat = resultSet.getInt("seat");
-          String fuel = resultSet.getString("fuel");
-          int engineCapacityCar = resultSet.getInt("engine_capacity_car");
-          String bodyType = resultSet.getString("body_type");
+          int seat = resultSet.getInt(VehicleEntityConstant.COLUMN_SEAT);
+          String fuel = resultSet.getString(VehicleEntityConstant.COLUMN_FUEL);
+          int engineCapacityCar = resultSet.getInt(
+              VehicleEntityConstant.COLUMN_ENGINE_CAPACITY_CAR);
+          String bodyType = resultSet.getString(VehicleEntityConstant.COLUMN_BODY_TYPE);
 
-          int engineCapacityMotorbike = resultSet.getInt("engine_capacity_motorbike");
-          String motorbikeType = resultSet.getString("type_motorbike");
-          String power = resultSet.getString("power");
+          int engineCapacityMotorbike = resultSet.getInt(
+              VehicleEntityConstant.COLUMN_ENGINE_CAPACITY_MOTORBIKE);
+          String motorbikeType = resultSet.getString(VehicleEntityConstant.COLUMN_TYPE_MOTORBIKE);
+          String power = resultSet.getString(VehicleEntityConstant.COLUMN_POWER);
 
           Vehicle vehicle = null;
 
